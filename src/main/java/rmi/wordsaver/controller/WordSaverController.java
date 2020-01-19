@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rmi.wordsaver.controller.exception.ServiceException;
 import rmi.wordsaver.model.Word;
 import javax.validation.Valid;
+    import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,7 @@ import java.util.List;
 @ApiResponses({
         @ApiResponse(code = 500, message = "Internal server error. Please contact system administrator")
 })
+@Validated
 public class WordSaverController {
 
     @GetMapping
@@ -54,7 +57,7 @@ public class WordSaverController {
             @ApiResponse(code = 204, message = "Success"),
             @ApiResponse(code = 404, message = "The given word doesn't exist in service")
     })
-    public ResponseEntity<Void> updateWord(@PathVariable String id, @Valid @RequestBody Word word) {
+    public ResponseEntity<Void> updateWord(@PathVariable @NotNull Long id, @Valid @RequestBody Word word) {
         if (id.equals("1")) {
             return ResponseEntity.notFound().build();
         } else if (id.equals("2")) {
@@ -69,7 +72,7 @@ public class WordSaverController {
             @ApiResponse(code = 204, message = "Success"),
             @ApiResponse(code = 404, message = "The given word doesn't exist in service")
     })
-    public ResponseEntity<Void> deleteWord(@PathVariable String id, @Valid @RequestBody Word word) {
+    public ResponseEntity<Void> deleteWord(@PathVariable @NotNull Long id, @Valid @RequestBody Word word) {
         if (id.equals("1")) {
             return ResponseEntity.notFound().build();
         }

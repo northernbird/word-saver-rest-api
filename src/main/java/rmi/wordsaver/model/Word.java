@@ -3,6 +3,8 @@ package rmi.wordsaver.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotEmpty;
+
 //import javax.persistence.Entity;
 //import javax.persistence.GeneratedValue;
 //import javax.persistence.GenerationType;
@@ -18,10 +20,13 @@ public class Word {
     @ApiModelProperty(value = "word identifier", example = "1")
     private Long id;
     @ApiModelProperty(value = "word", example = "離見の見")
+    @NotEmpty(message = "Please provide a word")
     private String word;
     @ApiModelProperty(value = "description of word", example = "自分をはなれ観客の立場で自分の姿を見ること")
+    @NotEmpty(message = "Please provide description")
     private String description;
     @ApiModelProperty(value = "language", example = "登録された単語の言語")
+    @NotEmpty(message = "Please provide language")
     private String language;
 
     public Word() {
