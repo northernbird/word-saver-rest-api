@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import rmi.wordsaver.controller.exception.ServiceException;
 import rmi.wordsaver.model.Word;
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -53,9 +54,13 @@ public class WordSaverController {
             @ApiResponse(code = 204, message = "Success"),
             @ApiResponse(code = 404, message = "The given word doesn't exist in service")
     })
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateWord(@PathVariable String id, @Valid @RequestBody Word word) {
-        //TODO how can handle for 404
+    public ResponseEntity<Void> updateWord(@PathVariable String id, @Valid @RequestBody Word word) {
+        if (id.equals("1")) {
+            return ResponseEntity.notFound().build();
+        } else if (id.equals("2")) {
+            throw new ServiceException();
+        }
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(path = "/{id}")
@@ -64,8 +69,10 @@ public class WordSaverController {
             @ApiResponse(code = 204, message = "Success"),
             @ApiResponse(code = 404, message = "The given word doesn't exist in service")
     })
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteWord(@PathVariable String id, @Valid @RequestBody Word word) {
-        //TODO how can handle for 404
+    public ResponseEntity<Void> deleteWord(@PathVariable String id, @Valid @RequestBody Word word) {
+        if (id.equals("1")) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.noContent().build();
     }
 }
