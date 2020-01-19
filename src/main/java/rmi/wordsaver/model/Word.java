@@ -2,21 +2,19 @@ package rmi.wordsaver.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
 import javax.validation.constraints.NotEmpty;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-//import javax.persistence.Entity;
-//import javax.persistence.GeneratedValue;
-//import javax.persistence.GenerationType;
-//import javax.persistence.Id;
 
-
-//@Entity
+@Entity(name = "words")
 @ApiModel(description = "サービスで管理する単語情報", value = "Word")
 public class Word {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(value = "word identifier", example = "1")
     private Long id;
     @ApiModelProperty(value = "word", example = "離見の見")

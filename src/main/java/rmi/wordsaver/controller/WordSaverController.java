@@ -3,6 +3,7 @@ package rmi.wordsaver.controller;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import rmi.wordsaver.controller.exception.ServiceException;
+import rmi.wordsaver.db.repository.WordRepository;
 import rmi.wordsaver.model.Word;
 import javax.validation.Valid;
-    import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +32,9 @@ import java.util.List;
 })
 @Validated
 public class WordSaverController {
+
+    @Autowired
+    private WordRepository repository;
 
     @GetMapping
     @ApiOperation(value = "read all registered words from service", notes = "サービスへ登録中の単語を取得します。")
@@ -48,7 +53,8 @@ public class WordSaverController {
             @ApiResponse(code = 201, message = "Success"),
     })
     @ResponseStatus(HttpStatus.CREATED)
-    public void createUser(final @Valid @RequestBody Word word) {
+    public void createWord(final @Valid @RequestBody Word word) {
+        repository.save(word);
     }
 
     @PutMapping(path = "/{id}")
