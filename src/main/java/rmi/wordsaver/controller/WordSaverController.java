@@ -23,12 +23,13 @@ import rmi.wordsaver.db.repository.WordRepository;
 import rmi.wordsaver.model.Word;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
-@RequestMapping(value = "/words", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/words")
 @ApiResponses({
         @ApiResponse(code = 500, message = "Internal server error. Please contact system administrator")
 })
@@ -38,7 +39,7 @@ public class WordSaverController {
     @Autowired
     private WordRepository repository;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "read all registered words from service", notes = "サービスへ登録中の単語を取得します。")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Success", response = Word.class, responseContainer = "List")
@@ -46,12 +47,16 @@ public class WordSaverController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false,
             paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public ResponseEntity<List<Word>> readAll() {
-        List<Word> list = new ArrayList<>();
-        list.add(new Word());
-        return  ResponseEntity.ok(list);
+
+        Iterable<Word> allWords = repository.findAll();
+        List<Word> actualList = StreamSupport
+                .stream(allWords.spliterator(), false)
+                .collect(Collectors.toList());
+
+        return  ResponseEntity.ok(actualList);
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "create a new word", notes = "新しい単語をサービスへ追加します。")
     @ApiResponses({
             @ApiResponse(code = 201, message = "Success"),
@@ -63,7 +68,7 @@ public class WordSaverController {
         repository.save(word);
     }
 
-    @PutMapping(path = "/{id}")
+    @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "update existing word", notes = "サービスへ登録済みの単語情報を修正します。")
     @ApiResponses({
             @ApiResponse(code = 204, message = "Success"),
