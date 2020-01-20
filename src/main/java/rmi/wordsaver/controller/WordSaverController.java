@@ -1,5 +1,6 @@
 package rmi.wordsaver.controller;
 
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -41,6 +42,8 @@ public class WordSaverController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "Success", response = Word.class, responseContainer = "List")
     })
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false,
+            paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public ResponseEntity<List<Word>> readAll() {
         List<Word> list = new ArrayList<>();
         list.add(new Word());
@@ -52,6 +55,8 @@ public class WordSaverController {
     @ApiResponses({
             @ApiResponse(code = 201, message = "Success"),
     })
+    @ApiImplicitParam(name = "Authorization", value = "Access user info", required = true, allowEmptyValue = false,
+            paramType = "header", dataTypeClass = String.class, example = "rnu01@gmail.com")
     @ResponseStatus(HttpStatus.CREATED)
     public void createWord(final @Valid @RequestBody Word word) {
         repository.save(word);
@@ -63,6 +68,8 @@ public class WordSaverController {
             @ApiResponse(code = 204, message = "Success"),
             @ApiResponse(code = 404, message = "The given word doesn't exist in service")
     })
+    @ApiImplicitParam(name = "Authorization", value = "Access user info", required = true, allowEmptyValue = false,
+            paramType = "header", dataTypeClass = String.class, example = "rnu01@gmail.com")
     public ResponseEntity<Void> updateWord(@PathVariable @NotNull Long id, @Valid @RequestBody Word word) {
         if (id.equals("1")) {
             return ResponseEntity.notFound().build();
@@ -78,6 +85,8 @@ public class WordSaverController {
             @ApiResponse(code = 204, message = "Success"),
             @ApiResponse(code = 404, message = "The given word doesn't exist in service")
     })
+    @ApiImplicitParam(name = "Authorization", value = "Access user info", required = true, allowEmptyValue = false,
+            paramType = "header", dataTypeClass = String.class, example = "rnu01@gmail.com")
     public ResponseEntity<Void> deleteWord(@PathVariable @NotNull Long id, @Valid @RequestBody Word word) {
         if (id.equals("1")) {
             return ResponseEntity.notFound().build();
