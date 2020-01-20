@@ -2,15 +2,23 @@ package rmi.wordsaver.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import javax.persistence.Column;
+import javax.persistence.EntityListeners;
 import javax.validation.constraints.NotEmpty;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 
 @Entity(name = "words")
 @ApiModel(description = "サービスで管理する単語情報", value = "Word")
+@EntityListeners(AuditingEntityListener.class)
 public class Word {
 
     @Id
@@ -26,6 +34,14 @@ public class Word {
     @ApiModelProperty(value = "language", example = "登録された単語の言語")
     @NotEmpty(message = "Please provide language")
     private String language;
+
+    @Column(name = "created_date", nullable = false, updatable = false)
+    @CreatedDate
+    private LocalDateTime createdDate;
+
+    @Column(name = "modified_date")
+    @LastModifiedDate
+    private LocalDateTime modifiedDate;
 
     public Word() {
     }
@@ -61,4 +77,5 @@ public class Word {
     public void setLanguage(String language) {
         this.language = language;
     }
+
 }
