@@ -2,7 +2,9 @@ package rmi.wordsaver.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -25,12 +27,15 @@ public class Word {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(value = "word identifier", example = "1")
     private Long id;
+
     @ApiModelProperty(value = "word", example = "離見の見")
     @NotEmpty(message = "Please provide a word")
     private String word;
+
     @ApiModelProperty(value = "description of word", example = "自分をはなれ観客の立場で自分の姿を見ること")
     @NotEmpty(message = "Please provide description")
     private String description;
+
     @ApiModelProperty(value = "language", example = "登録された単語の言語")
     @NotEmpty(message = "Please provide language")
     private String language;
@@ -42,6 +47,14 @@ public class Word {
     @Column(name = "modified_date")
     @LastModifiedDate
     private LocalDateTime modifiedDate;
+
+    @Column(name = "created_by")
+    @CreatedBy
+    private String createdBy;
+
+    @Column(name = "modified_by")
+    @LastModifiedBy
+    private String modifiedBy;
 
     public Word() {
     }

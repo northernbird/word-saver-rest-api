@@ -80,11 +80,12 @@ public class WordSaverController {
             exsistingWord.setLanguage(updateWord.getLanguage());
             exsistingWord.setDescription(updateWord.getDescription());
             exsistingWord.setWord(updateWord.getWord());
+            repository.save(exsistingWord);
 
             return ResponseEntity.noContent().build();
 
         } catch (Exception e) {
-            e.fillInStackTrace();
+            e.printStackTrace();
             throw new ServiceException();
         }
     }
