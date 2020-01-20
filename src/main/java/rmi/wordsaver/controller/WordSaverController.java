@@ -25,6 +25,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/words", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -70,13 +71,22 @@ public class WordSaverController {
     })
     @ApiImplicitParam(name = "Authorization", value = "Access user info", required = true, allowEmptyValue = false,
             paramType = "header", dataTypeClass = String.class, example = "rnu01@gmail.com")
-    public ResponseEntity<Void> updateWord(@PathVariable @NotNull Long id, @Valid @RequestBody Word word) {
-        if (id.equals("1")) {
-            return ResponseEntity.notFound().build();
-        } else if (id.equals("2")) {
+    public ResponseEntity<Void> updateWord(@PathVariable @NotNull Long id, @Valid @RequestBody Word updateWord) {
+
+        try {
+
+            Optional<Word> byId = repository.findById(id);
+            Word exsistingWord = byId.get();
+            exsistingWord.setLanguage(updateWord.getLanguage());
+            exsistingWord.setDescription(updateWord.getDescription());
+            exsistingWord.setWord(updateWord.getWord());
+
+            return ResponseEntity.noContent().build();
+
+        } catch (Exception e) {
+            e.fillInStackTrace();
             throw new ServiceException();
         }
-        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(path = "/{id}")

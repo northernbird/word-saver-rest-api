@@ -5,6 +5,7 @@ import rmi.wordsaver.model.Word;
 
 public interface WordRepository extends CrudRepository<Word, Long> {
 
-    Word findById(long id);
+    // TODO (rmi) check why it doesn't work correctly
+//    Word findByWordId(long id);
 
 }
